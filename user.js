@@ -1,5 +1,9 @@
 var linguist = require('./linguist');
 
+/**
+ * @param array languages Array of language objects denoting user's known languages.
+ * @param string defaultLanguage User's native language as string. (e.g. 'english')  Optional: 'english' if omitted.
+ */
 var User = function(languages, defaultLanguage) {
     this.languages = {};
     this.defaultLanguage = defaultLanguage || 'english';
@@ -22,15 +26,16 @@ var User = function(languages, defaultLanguage) {
             }
         };
     }
+
+    return this;
 };
 
 /**
  * Interface to send a message from a User to linguist.js.
  *
  * @param string content A plain-text message.
- * @param string language Plain-text, lowercase name of desired spoken language.
- * @return object Msg Returns Msg object of content (the message) and language (language
- * it was spoken in.
+ * @param string language Plain-text, lowercase name of desired spoken language. Optional.
+ * @return object Msg Returns Msg object of content (the message) and language (language it was spoken in.
  */
 User.prototype.sendMsg = function(content, language) {
     if (content === '' || content === undefined) {
