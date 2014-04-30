@@ -32,10 +32,15 @@ var linguist = (function() {
     var punctuation = '!@,.:;$';
     var possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    // contains metadata about a person's language comprehension
+    /*
+     * Contains metadata about a person's language comprehension.
+     *
+     * Assumption: If no skill parameter, assume 100% comprehension
+     * for simple no-distortion communication.
+     */
     function MetaData(language, skill) {
         this.language = language || 'english';
-        if (skill === 0) {
+        if (skill === 0) {  // needed for javascript weirdness, non-zero values work fine in else branch
             this.skill = 0;
         }
         else {
@@ -53,7 +58,16 @@ var linguist = (function() {
         return this;
     }
 
-    // private method to scramble random characters in a message
+    /**
+     * Private method to scramble random characters in a message.
+     *
+     * If a User's proficiency is below MIN_PROFICIENCY, the
+     * drop-off in comprehension is much larger due to the
+     * value of PROFICIENCY_PENALTY.
+     *
+     * TODO: improve the realism of this distortion to match
+     * real-world loss of comprehension.
+     */
     var _distort = function(c, skillLevel) {
         var randomNumFrom100 = Math.random() * 100;
         if (skillLevel < MIN_PROFICIENCY) {
@@ -70,7 +84,6 @@ var linguist = (function() {
     // private method to translate a message, quality based on metadata.skill
     var _translate = function(msg, metadata) {
         if (msg.content.length > 0) {
-            var handicap = 0;
             var msgAsArr = msg.content.split('');
 
             for (var i=0; i<msgAsArr.length; i++) {

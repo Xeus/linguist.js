@@ -60,7 +60,7 @@ describe('metadata', function() {
         assert.equal(100, m2.skill);
     });
 
-    it('should create metadata from 2 parameters', function() {
+    it('should create metadata from 2 parameters and test 0 as a skill value parameter', function() {
         var m3 = linguist.getNewMetaData('french', 0);
         assert.equal('french', m3.language);
         assert.equal(0, m3.skill); 
